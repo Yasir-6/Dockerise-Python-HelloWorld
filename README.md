@@ -34,11 +34,12 @@ CMD ["python", "app.py"]
 -------------------------------------------------------------------
 
 # Build The image from Dockerfile
+
 Make sure you are still at the top level of your new directory. Here’s what ls should show:
--------------------------------------------------
+```
 $ ls
 Dockerfile		app.py			requirements.txt
--------------------------------------------------
+```
 build the image with friendly name using -t :
 ```
 docker build -t friendlyhello .
@@ -97,6 +98,7 @@ Your first docker-compose.yml file
 -Save this file as docker-compose.yml wherever you want. Be sure you have pushed the image you created a registry, and update this .yml by replacing username/repo:tag with your image details.
 
 -------------------------docker-compose.yml content------------------------
+
 version: "3"
 services:
   web:
