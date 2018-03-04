@@ -9,8 +9,11 @@ Testing (Dockerfile, Composer) with a simple python app
   -Mac:https://docs.docker.com/docker-for-mac/
   
 # Définir un conteneur avec Dockerfile 
+
 copy paste in a notepad file and save it as Dockerfile (all files)
+
 ---------------------------Dockerfile content---------------------------------------
+
 #Use an official Python runtime as a parent image
 FROM python:2.7-slim
 
@@ -85,6 +88,7 @@ From now on, you can use docker run and run your app on any machine with this co
 docker run -p 4000:80 username/repository:tag
 ```
 # Your first docker-compose.yml file
+
 -In a distributed application, different pieces of the app are called “services.” For example, if you imagine a video sharing site, it probably includes a service for storing application data in a database, a service for video transcoding in the background after a user uploads something, a service for the front-end, and so on.
 
 -Services are really just “containers in production.” A service only runs one image, but it codifies the way that image runs—what ports it should use, how many replicas of the container should run so the service has the capacity it needs, and so on. Scaling a service changes the number of container instances running that piece of software, assigning more computing resources to the service in the process.
@@ -97,7 +101,8 @@ Your first docker-compose.yml file
 
 -Save this file as docker-compose.yml wherever you want. Be sure you have pushed the image you created a registry, and update this .yml by replacing username/repo:tag with your image details.
 
--------------------------docker-compose.yml content------------------------
+-docker-compose.yml content:
+---------------------------------------------------------------------
 
 version: "3"
 services:
