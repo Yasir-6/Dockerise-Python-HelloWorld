@@ -10,31 +10,7 @@ Testing (Dockerfile, Composer) with a simple python app
   
 # Définir un conteneur avec Dockerfile 
 
-copy paste in a notepad file and save it as Dockerfile (all files)
-
----------------------------Dockerfile content---------------------------------------
-
-#Use an official Python runtime as a parent image
-FROM python:2.7-slim
-
-#Set the working directory to /app
-WORKDIR /app
-
-#Copy the current directory contents into the container at /app
-ADD . /app
-
-#Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
-
-#Make port 80 available to the world outside this container
-EXPOSE 80
-
-#Define environment variable
-ENV NAME World
-
-#Run app.py when the container launches
-CMD ["python", "app.py"]
--------------------------------------------------------------------
+copy paste in a notepad file and save it named Dockerfile (as all files)
 
 # Build The image from Dockerfile
 
@@ -97,33 +73,11 @@ docker run -p 4000:80 username/repository:tag
 Save this file as docker-compose.yml wherever you want. Be sure you have pushed the image you created in Part 2 to a registry, and update this .yml by replacing username/repo:tag with your image details.
 # Let practice a 3chiri !
 Your first docker-compose.yml file
+
 -A docker-compose.yml file is a YAML file that defines how Docker containers should behave in production.
 
 -Save this file as docker-compose.yml wherever you want. Be sure you have pushed the image you created a registry, and update this .yml by replacing username/repo:tag with your image details.
 
--docker-compose.yml content:
----------------------------------------------------------------------
-
-version: "3"
-services:
-  web:
-    #replace username/repo:tag with your name and image details
-    image: username/repo:tag
-    deploy:
-      replicas: 5
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 50M
-      restart_policy:
-        condition: on-failure
-    ports:
-      - "80:80"
-    networks:
-      - webnet
-networks:
-  webnet:
- ------------------------------------------------------------------------
 -This docker-compose.yml file tells Docker to do the following:
 
 -Pull the image we uploaded in step 2 from the registry.
