@@ -2,32 +2,34 @@
 Testing (Dockerfile, Composer) with a simple python app
 
 # Installation de Docker
-  Windows 10 pro : https://docs.docker.com/docker-for-windows/install/
-  Windows 7,8 ,8.1 :https://docs.docker.com/toolbox/overview/
-  Mac:https://docs.docker.com/docker-for-mac/
+  -Windows 10 pro : https://docs.docker.com/docker-for-windows/install/
+  
+  -Windows 7,8 ,8.1 :https://docs.docker.com/toolbox/overview/
+  
+  -Mac:https://docs.docker.com/docker-for-mac/
   
 # Définir un conteneur avec Dockerfile 
 copy paste in a notepad file and save it as Dockerfile (all files)
 ---------------------------Dockerfile content---------------------------------------
-# Use an official Python runtime as a parent image
+#Use an official Python runtime as a parent image
 FROM python:2.7-slim
 
-# Set the working directory to /app
+#Set the working directory to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
+#Copy the current directory contents into the container at /app
 ADD . /app
 
-# Install any needed packages specified in requirements.txt
+#Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Make port 80 available to the world outside this container
+#Make port 80 available to the world outside this container
 EXPOSE 80
 
-# Define environment variable
+#Define environment variable
 ENV NAME World
 
-# Run app.py when the container launches
+#Run app.py when the container launches
 CMD ["python", "app.py"]
 -------------------------------------------------------------------
 
