@@ -84,23 +84,23 @@ From now on, you can use docker run and run your app on any machine with this co
 docker run -p 4000:80 username/repository:tag
 ```
 # Your first docker-compose.yml file
-In a distributed application, different pieces of the app are called “services.” For example, if you imagine a video sharing site, it probably includes a service for storing application data in a database, a service for video transcoding in the background after a user uploads something, a service for the front-end, and so on.
+-In a distributed application, different pieces of the app are called “services.” For example, if you imagine a video sharing site, it probably includes a service for storing application data in a database, a service for video transcoding in the background after a user uploads something, a service for the front-end, and so on.
 
-Services are really just “containers in production.” A service only runs one image, but it codifies the way that image runs—what ports it should use, how many replicas of the container should run so the service has the capacity it needs, and so on. Scaling a service changes the number of container instances running that piece of software, assigning more computing resources to the service in the process.
+-Services are really just “containers in production.” A service only runs one image, but it codifies the way that image runs—what ports it should use, how many replicas of the container should run so the service has the capacity it needs, and so on. Scaling a service changes the number of container instances running that piece of software, assigning more computing resources to the service in the process.
 
-Luckily it’s very easy to define, run, and scale services with the Docker platform – just write a docker-compose.yml file.
+-Luckily it’s very easy to define, run, and scale services with the Docker platform – just write a docker-compose.yml file.
 Save this file as docker-compose.yml wherever you want. Be sure you have pushed the image you created in Part 2 to a registry, and update this .yml by replacing username/repo:tag with your image details.
 # Let practice a 3chiri !
 Your first docker-compose.yml file
-A docker-compose.yml file is a YAML file that defines how Docker containers should behave in production.
+-A docker-compose.yml file is a YAML file that defines how Docker containers should behave in production.
 
-docker-compose.yml
-Save this file as docker-compose.yml wherever you want. Be sure you have pushed the image you created a registry, and update this .yml by replacing username/repo:tag with your image details.
+-Save this file as docker-compose.yml wherever you want. Be sure you have pushed the image you created a registry, and update this .yml by replacing username/repo:tag with your image details.
+
 -------------------------docker-compose.yml content------------------------
 version: "3"
 services:
   web:
-    # replace username/repo:tag with your name and image details
+    #replace username/repo:tag with your name and image details
     image: username/repo:tag
     deploy:
       replicas: 5
@@ -117,28 +117,29 @@ services:
 networks:
   webnet:
  ------------------------------------------------------------------------
-This docker-compose.yml file tells Docker to do the following:
+-This docker-compose.yml file tells Docker to do the following:
 
-Pull the image we uploaded in step 2 from the registry.
+-Pull the image we uploaded in step 2 from the registry.
 
-Run 5 instances of that image as a service called web, limiting each one to use, at most, 10% of the CPU (across all cores), and 50MB of RAM.
+-Run 5 instances of that image as a service called web, limiting each one to use, at most, 10% of the CPU (across all cores), and 50MB of RAM.
 
-Immediately restart containers if one fails.
+-Immediately restart containers if one fails.
 
-Map port 80 on the host to web’s port 80.
+-Map port 80 on the host to web’s port 80.
 
-Instruct web’s containers to share port 80 via a load-balanced network called webnet. (Internally, the containers themselves publish to web’s port 80 at an ephemeral port.)
+-Instruct web’s containers to share port 80 via a load-balanced network called webnet. (Internally, the containers themselves publish to web’s port 80 at an ephemeral port.)
 
-Define the webnet network with the default settings (which is a load-balanced overlay network).
+-Define the webnet network with the default settings (which is a load-balanced overlay network).
 
-Run your service (service = container in prod )
+-Run your service (service = container in prod )
 ```
 docker swarm init
 
 docker stack deploy -c docker-compose.yml getstartedlab
 ```
-Note :We get into the meaning of that command in part 4. If you don’t run docker swarm init you get an error that “this node is not a swarm manager.”
-hadchi because we are in the cloud otherwise we can run without swarm if we use our local image in the docker-compose.yml file
+-Note :We get into the meaning of that command in part 4. If you don’t run docker swarm init you get an error that “this node is not a swarm manager.”
+
+-hadchi because we are in the cloud otherwise we can run without swarm if we use our local image in the docker-compose.yml file
 
 # The End
 ```
