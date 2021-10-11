@@ -4,11 +4,11 @@ Testing (Dockerfile, Composer) with a simple python app
 # Installation de Docker
   -Windows 10 pro : https://docs.docker.com/docker-for-windows/install/
   
-  -Windows 7,8 ,8.1 :https://docs.docker.com/toolbox/overview/
+  -Windows 7,8 ,8.1 : https://docs.docker.com/toolbox/overview/
   
-  -Mac:https://docs.docker.com/docker-for-mac/
+  -Mac: https://docs.docker.com/docker-for-mac/
   
-# Définir un conteneur avec Dockerfile 
+# Define a container wirh Dockerfile 
 
 copy paste in a notepad file and save it named Dockerfile (as all files)
 
