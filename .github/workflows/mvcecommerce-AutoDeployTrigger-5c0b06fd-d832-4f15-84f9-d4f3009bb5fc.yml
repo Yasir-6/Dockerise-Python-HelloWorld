@@ -27,6 +27,28 @@ jobs:
           tenant-id: ${{ secrets.MVCECOMMERCE_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.MVCECOMMERCE_AZURE_SUBSCRIPTION_ID }}
           
+      - name: Create ACR if needed
+        run: |
+          # Check if ACR exists
+          if ! az acr show --name mvcecommerce --resource-group newgrp &>/dev/null; then
+            echo "Creating Azure Container Registry 'mvcecommerce'"
+            az acr create --resource-group newgrp --name mvcecommerce --sku Basic --admin-enabled true
+          fi
+          
+      - name: Set up ACR permissions
+        run: |
+          # Get Container App managed identity principal ID
+          app_principal_id=$(az containerapp show --name mvcecommerce --resource-group newgrp --query identity.principalId -o tsv)
+          
+          # Get ACR resource ID
+          acr_id=$(az acr show --name mvcecommerce --resource-group newgrp --query id -o tsv)
+          
+          # Assign AcrPull role to the Container App
+          az role assignment create --assignee $app_principal_id --role "AcrPull" --scope $acr_id
+          
+          # Enable admin credentials for the Container App to access ACR
+          az acr update --name mvcecommerce --resource-group newgrp --admin-enabled true
+          
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
@@ -34,4 +56,5 @@ jobs:
           dockerfilePath: Dockerfile
           containerAppName: mvcecommerce
           resourceGroup: newgrp
+          acrName: mvcecommerce
           imageToDeploy: mvcecommerce.azurecr.io/gh-action/container-app:${{ github.sha }}
