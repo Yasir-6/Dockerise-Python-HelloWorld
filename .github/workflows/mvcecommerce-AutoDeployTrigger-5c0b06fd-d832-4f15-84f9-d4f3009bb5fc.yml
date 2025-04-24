@@ -27,27 +27,24 @@ jobs:
           tenant-id: ${{ secrets.MVCECOMMERCE_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.MVCECOMMERCE_AZURE_SUBSCRIPTION_ID }}
           
-      - name: Create ACR if needed
+      - name: Create and configure ACR
         run: |
-          # Check if ACR exists
+          # Check if ACR exists, if not create it
           if ! az acr show --name mvcecommerce --resource-group newgrp &>/dev/null; then
             echo "Creating Azure Container Registry 'mvcecommerce'"
             az acr create --resource-group newgrp --name mvcecommerce --sku Basic --admin-enabled true
+          else
+            # Make sure admin is enabled
+            az acr update --name mvcecommerce --resource-group newgrp --admin-enabled true
           fi
           
-      - name: Set up ACR permissions
-        run: |
-          # Get Container App managed identity principal ID
-          app_principal_id=$(az containerapp show --name mvcecommerce --resource-group newgrp --query identity.principalId -o tsv)
+          # Get ACR credentials
+          ACR_USERNAME=$(az acr credential show --name mvcecommerce --resource-group newgrp --query username -o tsv)
+          ACR_PASSWORD=$(az acr credential show --name mvcecommerce --resource-group newgrp --query "passwords[0].value" -o tsv)
           
-          # Get ACR resource ID
-          acr_id=$(az acr show --name mvcecommerce --resource-group newgrp --query id -o tsv)
-          
-          # Assign AcrPull role to the Container App
-          az role assignment create --assignee $app_principal_id --role "AcrPull" --scope $acr_id
-          
-          # Enable admin credentials for the Container App to access ACR
-          az acr update --name mvcecommerce --resource-group newgrp --admin-enabled true
+          # Set as environment variables for the deploy action
+          echo "ACR_USERNAME=$ACR_USERNAME" >> $GITHUB_ENV
+          echo "ACR_PASSWORD=$ACR_PASSWORD" >> $GITHUB_ENV
           
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
@@ -57,4 +54,6 @@ jobs:
           containerAppName: mvcecommerce
           resourceGroup: newgrp
           acrName: mvcecommerce
-          imageToDeploy: mvcecommerce.azurecr.io/gh-action/container-app:${{ github.sha }}
+          registryUrl: mvcecommerce.azurecr.io
+          registryUsername: ${{ env.ACR_USERNAME }}
+          registryPassword: ${{ env.ACR_PASSWORD }}
